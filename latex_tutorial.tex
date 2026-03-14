@@ -1,0 +1,970 @@
+% ============================================================
+%  LaTeX 入门教程
+%  适用对象：数学系本科二年级学生
+%  作者：课程组
+%  日期：\today
+% ============================================================
+
+\documentclass[12pt, a4paper]{article}
+
+% ---- 基础宏包 ----
+\usepackage[UTF8]{ctex}          % 中文支持
+\usepackage{amsmath, amssymb, amsthm}  % AMS 数学宏包
+\usepackage{geometry}            % 页面版式
+\usepackage{hyperref}            % 超链接
+\usepackage{graphicx}            % 插图
+\usepackage{listings}            % 代码高亮
+\usepackage{xcolor}              % 颜色
+\usepackage{booktabs}            % 三线表
+\usepackage{enumitem}            % 列表定制
+\usepackage{tcolorbox}           % 彩色提示框
+\usepackage{fontawesome5}        % 图标（Overleaf 可用）
+\usepackage{microtype}           % 微排版优化
+
+% ---- 页面设置 ----
+\geometry{top=2.5cm, bottom=2.5cm, left=3cm, right=3cm}
+
+% ---- 超链接颜色 ----
+\hypersetup{
+    colorlinks = true,
+    linkcolor  = blue!60!black,
+    urlcolor   = blue!70!black,
+    citecolor  = green!50!black
+}
+
+% ---- 代码样式 ----
+\lstset{
+    language     = [LaTeX]TeX,
+    basicstyle   = \ttfamily\small,
+    keywordstyle = \color{blue}\bfseries,
+    commentstyle = \color{gray}\itshape,
+    stringstyle  = \color{orange},
+    backgroundcolor = \color{gray!10},
+    frame        = single,
+    breaklines   = true,
+    numbers      = left,
+    numberstyle  = \tiny\color{gray},
+    tabsize      = 2
+}
+
+% ---- 定理环境 ----
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{example}[theorem]{例}
+\newtheorem{remark}[theorem]{注}
+
+% ---- 提示框样式 ----
+\tcbuselibrary{skins, breakable}
+\newtcolorbox{tipbox}[1][提示]{
+    colback  = blue!5,
+    colframe = blue!40!black,
+    fonttitle= \bfseries,
+    title    = #1,
+    breakable
+}
+\newtcolorbox{warnbox}[1][注意]{
+    colback  = orange!5,
+    colframe = orange!70!black,
+    fonttitle= \bfseries,
+    title    = #1,
+    breakable
+}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+% ---- 标题页 ----
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge\bfseries \LaTeX{} 入门教程\par}
+    \vspace{0.5cm}
+    {\Large 数学系本科生实用指南\par}
+    \vspace{1.5cm}
+    {\large 适用对象：数学系本科二年级\par}
+    \vspace{0.5cm}
+    {\large 平台：\href{https://www.overleaf.com}{Overleaf（在线编辑器）}\par}
+    \vspace{2cm}
+    {\large \today\par}
+    \vfill
+    \begin{tipbox}[阅读指南]
+        本教程分为五个部分：\\
+        \textbf{第一部分}：为什么学 \LaTeX{}？\\
+        \textbf{第二部分}：\LaTeX{} 是什么？\\
+        \textbf{第三部分}：在哪里用 \LaTeX{}（Overleaf 快速上手）\\
+        \textbf{第四部分}：必知必会的命令与技巧（\textcolor{red}{重点}）\\
+        \textbf{第五部分}：AI 时代如何高效使用 \LaTeX{}
+    \end{tipbox}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{为什么要学习使用 \LaTeX{}？}
+% ============================================================
+
+很多同学初次接触 \LaTeX{} 时，会觉得它比 Word 麻烦得多——需要写代码才能排版，
+有什么理由不直接用 Word 呢？下面从几个角度说明学习 \LaTeX{} 的必要性。
+
+\subsection{数学公式排版无可替代}
+
+\LaTeX{} 天生为数学而生。同样是输入一个积分极限公式：
+
+\begin{itemize}
+    \item Word 公式编辑器：需要多次点击才能完成，排版结果参差不齐。
+    \item \LaTeX{}：一行代码，结果精确、美观：
+\end{itemize}
+
+\begin{lstlisting}
+\[ \lim_{n \to \infty} \sum_{k=1}^{n} \frac{1}{k^2} = \frac{\pi^2}{6} \]
+\end{lstlisting}
+
+渲染结果：
+\[
+    \lim_{n \to \infty} \sum_{k=1}^{n} \frac{1}{k^2} = \frac{\pi^2}{6}
+\]
+
+\subsection{学术写作的行业标准}
+
+\begin{itemize}
+    \item 绝大多数数学、物理、计算机领域的顶级期刊（\textit{Annals of Mathematics}、
+          \textit{Journal of the AMS} 等）只接受 \LaTeX{} 投稿。
+    \item arXiv 预印本平台要求提交 \LaTeX{} 源文件。
+    \item 毕业论文、科研报告、课程作业使用 \LaTeX{} 会给导师留下良好印象。
+\end{itemize}
+
+\subsection{结构清晰，版本友好}
+
+\LaTeX{} 的源文件是纯文本（\texttt{.tex}），可以：
+\begin{enumerate}
+    \item 使用 Git 进行版本管理，精确追踪每一次修改。
+    \item 与合作者分工写作不同章节，最终合并。
+    \item 一键更换模板——只需修改文档类，内容无需改动。
+\end{enumerate}
+
+\subsection{输出稳定，跨平台一致}
+
+不同操作系统、不同设备上编译同一份 \texttt{.tex} 文件，输出的 PDF 像素级一致，
+不会出现 Word 文件在不同电脑上乱版的问题。
+
+\begin{tipbox}[小结]
+    对于数学系学生而言，\LaTeX{} 不是"锦上添花"的工具，而是进入学术圈的
+    \textbf{基础技能}，越早掌握越受益。
+\end{tipbox}
+
+% ============================================================
+\section{什么是 \LaTeX{}？}
+% ============================================================
+
+\subsection{从 \TeX{} 到 \LaTeX{}}
+
+\begin{description}
+    \item[\TeX{}]
+        由计算机科学家 Donald Knuth 于 1978 年开发的排版系统，
+        专为高质量数学公式排版而设计。\TeX{} 本身功能强大，但命令较底层。
+    \item[\LaTeX{}]
+        由 Leslie Lamport 于 1984 年在 \TeX{} 之上构建的宏包集合，
+        提供了更易用的高层命令（如 \verb|\section|、\verb|\begin{equation}|
+        等），是目前学术写作的主流选择。
+\end{description}
+
+\subsection{"所想即所得" vs "所见即所得"}
+
+Word 是 \textbf{所见即所得}（WYSIWYG）编辑器——你在屏幕上看到的就是最终输出。
+\LaTeX{} 是 \textbf{所想即所得}（WYSIWYM）系统——你描述\emph{内容和结构}，
+由编译器决定最终排版，从而保证排版的一致性与专业性。
+
+\begin{center}
+\begin{tabular}{lcc}
+    \toprule
+    特性 & Word & \LaTeX{} \\
+    \midrule
+    数学公式 & 一般 & \textbf{优秀} \\
+    排版一致性 & 一般 & \textbf{优秀} \\
+    学习曲线 & 低 & 中等 \\
+    版本控制 & 困难 & \textbf{容易} \\
+    期刊投稿 & 部分支持 & \textbf{主流标准} \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{\LaTeX{} 的工作流}
+
+一份 \LaTeX{} 文档的工作流如下：
+
+\[
+    \texttt{.tex 源文件}
+    \xrightarrow{\texttt{编译（pdflatex / xelatex）}}
+    \texttt{PDF 输出}
+\]
+
+在 Overleaf 上，编译由云端自动完成，无需在本地安装任何软件。
+
+% ============================================================
+\section{在哪里使用 \LaTeX{}？——Overleaf 快速上手}
+% ============================================================
+
+\subsection{为什么选择 Overleaf？}
+
+\href{https://www.overleaf.com}{Overleaf} 是目前最流行的在线 \LaTeX{} 编辑平台，
+具有以下优势：
+
+\begin{enumerate}
+    \item \textbf{零安装}：浏览器即可使用，无需配置本地 \TeX{} 发行版。
+    \item \textbf{实时预览}：修改代码后立即看到编译结果。
+    \item \textbf{协作编辑}：与同学、导师共享项目，实时协同。
+    \item \textbf{海量模板}：期刊模板、毕业论文模板一键套用。
+    \item \textbf{历史版本}：自动保存，支持回滚。
+\end{enumerate}
+
+\subsection{注册与创建第一个项目}
+
+\begin{enumerate}
+    \item 访问 \url{https://www.overleaf.com} 并注册账号（推荐使用学校邮箱）。
+    \item 点击 \textbf{New Project} $\to$ \textbf{Blank Project}，输入项目名称。
+    \item 在编辑器左侧可以看到自动生成的 \texttt{main.tex} 文件。
+    \item 点击右上角的 \textbf{Recompile} 按钮（或按 \texttt{Ctrl+Enter}），
+          查看编译后的 PDF。
+\end{enumerate}
+
+\subsection{Overleaf 界面介绍}
+
+Overleaf 界面分为三个区域：
+
+\begin{description}
+    \item[左侧文件树] 管理项目中的所有文件（\texttt{.tex}、图片、参考文献等）。
+    \item[中间编辑区] 编写 \LaTeX{} 代码的地方，支持语法高亮和自动补全。
+    \item[右侧预览区] 实时显示编译后的 PDF，点击 PDF 可跳转到对应源代码行。
+\end{description}
+
+\subsection{编译器选择}
+
+对于中文文档，建议在 Overleaf 中将编译器设置为 \textbf{XeLaTeX}：
+
+\begin{enumerate}
+    \item 点击左上角 \textbf{Menu}。
+    \item 在 \textbf{Compiler} 下拉菜单中选择 \textbf{XeLaTeX}。
+    \item 重新编译即可正常显示中文。
+\end{enumerate}
+
+\begin{tipbox}[中文支持]
+    使用 \texttt{ctex} 宏包配合 XeLaTeX 编译器，可以轻松支持中文排版：
+    \begin{lstlisting}
+\usepackage[UTF8]{ctex}
+    \end{lstlisting}
+\end{tipbox}
+
+% ============================================================
+\section{必知必会的 \LaTeX{} 命令和技巧}
+% ============================================================
+
+本节是本教程的\textbf{核心部分}，按照由浅入深的顺序，介绍数学系学生最常用的命令。
+
+% ----------------------------------------------------------
+\subsection{文档结构}
+% ----------------------------------------------------------
+
+每份 \LaTeX{} 文档都由两部分组成：
+
+\begin{lstlisting}
+% 导言区（Preamble）
+\documentclass[12pt, a4paper]{article}
+\usepackage{amsmath}   % 加载宏包
+
+% 正文区（Body）
+\begin{document}
+
+\title{我的第一篇文章}
+\author{张三}
+\date{\today}
+\maketitle             % 生成标题
+
+\section{第一节}
+这里是正文内容。
+
+\end{document}
+\end{lstlisting}
+
+\begin{warnbox}[注意]
+    \verb|\begin{document}| 和 \verb|\end{document}| 之间才是正文区，
+    所有显示内容必须写在这里。
+\end{warnbox}
+
+% ----------------------------------------------------------
+\subsection{常用文档类}
+% ----------------------------------------------------------
+
+\begin{center}
+\begin{tabular}{ll}
+    \toprule
+    文档类 & 用途 \\
+    \midrule
+    \texttt{article} & 论文、作业、短文 \\
+    \texttt{report} & 实验报告、长篇报告 \\
+    \texttt{book} & 教材、专著 \\
+    \texttt{beamer} & 幻灯片（演示文稿） \\
+    \texttt{ctexart} & 中文短文（ctex 提供） \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+% ----------------------------------------------------------
+\subsection{章节命令}
+% ----------------------------------------------------------
+
+\begin{lstlisting}
+\section{一级标题}
+\subsection{二级标题}
+\subsubsection{三级标题}
+\paragraph{段落标题}
+\end{lstlisting}
+
+\LaTeX{} 会自动编号，并在 \verb|\tableofcontents| 处生成目录。
+
+% ----------------------------------------------------------
+\subsection{文本格式}
+% ----------------------------------------------------------
+
+\begin{lstlisting}
+\textbf{粗体文字}       % 粗体
+\textit{斜体文字}       % 斜体
+\underline{下划线}      % 下划线
+\emph{强调文字}         % 自适应强调
+\texttt{等宽字体}       % 代码/命令
+\textcolor{red}{红色}   % 彩色（需 xcolor 宏包）
+\end{lstlisting}
+
+效果示例：
+\textbf{粗体}，\textit{斜体}，\underline{下划线}，\emph{强调}，
+\texttt{等宽}，\textcolor{red}{红色}。
+
+% ----------------------------------------------------------
+\subsection{数学公式——核心技能}
+% ----------------------------------------------------------
+
+\subsubsection{行内公式与行间公式}
+
+\begin{lstlisting}
+% 行内公式：用 $ ... $ 包裹
+设函数 $f(x) = x^2 + 1$，则 $f'(x) = 2x$。
+
+% 行间公式（居中，不编号）：用 \[ ... \] 包裹
+\[
+    \int_0^1 x^2 \, dx = \frac{1}{3}
+\]
+
+% 行间公式（居中，自动编号）：使用 equation 环境
+\begin{equation}
+    e^{i\pi} + 1 = 0
+    \label{eq:euler}
+\end{equation}
+
+引用公式：见式 \eqref{eq:euler}。
+\end{lstlisting}
+
+效果：设函数 $f(x) = x^2 + 1$，则 $f'(x) = 2x$。
+
+\[
+    \int_0^1 x^2 \, dx = \frac{1}{3}
+\]
+
+\begin{equation}
+    e^{i\pi} + 1 = 0
+    \label{eq:euler}
+\end{equation}
+
+\subsubsection{常用数学符号速查}
+
+\begin{center}
+\begin{tabular}{lll}
+    \toprule
+    命令 & 符号 & 说明 \\
+    \midrule
+    \verb|\frac{a}{b}|     & $\frac{a}{b}$     & 分数 \\
+    \verb|\sqrt{x}|        & $\sqrt{x}$        & 平方根 \\
+    \verb|\sqrt[n]{x}|     & $\sqrt[n]{x}$     & $n$ 次根 \\
+    \verb|x^{2}|           & $x^{2}$           & 上标（指数）\\
+    \verb|x_{n}|           & $x_{n}$           & 下标 \\
+    \verb|\sum_{i=1}^{n}|  & $\sum_{i=1}^{n}$  & 求和 \\
+    \verb|\prod_{i=1}^{n}| & $\prod_{i=1}^{n}$ & 连乘 \\
+    \verb|\int_a^b|        & $\int_a^b$        & 积分 \\
+    \verb|\iint|           & $\iint$           & 二重积分 \\
+    \verb|\iiint|          & $\iiint$          & 三重积分 \\
+    \verb|\oint|           & $\oint$           & 曲线积分 \\
+    \verb|\lim_{x\to 0}|   & $\lim_{x\to 0}$   & 极限 \\
+    \verb|\infty|          & $\infty$          & 无穷大 \\
+    \verb|\partial|        & $\partial$        & 偏导符号 \\
+    \verb|\nabla|          & $\nabla$          & 梯度/哈密顿算子\\
+    \verb|\forall|         & $\forall$         & 全称量词 \\
+    \verb|\exists|         & $\exists$         & 存在量词 \\
+    \verb|\in|             & $\in$             & 属于 \\
+    \verb|\subset|         & $\subset$         & 子集 \\
+    \verb|\cup|            & $\cup$            & 并集 \\
+    \verb|\cap|            & $\cap$            & 交集 \\
+    \verb|\mathbb{R}|      & $\mathbb{R}$      & 实数集 \\
+    \verb|\mathbb{Z}|      & $\mathbb{Z}$      & 整数集 \\
+    \verb|\mathbb{N}|      & $\mathbb{N}$      & 自然数集 \\
+    \verb|\mathbb{C}|      & $\mathbb{C}$      & 复数集 \\
+    \verb|\alpha, \beta|   & $\alpha, \beta$   & 希腊字母 \\
+    \verb|\pi, \sigma|     & $\pi, \sigma$     & 希腊字母 \\
+    \verb|\lambda, \mu|    & $\lambda, \mu$    & 希腊字母 \\
+    \verb|\leq, \geq|      & $\leq, \geq$      & 不等号 \\
+    \verb|\neq|            & $\neq$            & 不等于 \\
+    \verb|\approx|         & $\approx$         & 约等于 \\
+    \verb|\equiv|          & $\equiv$          & 恒等于 \\
+    \verb|\cdot|           & $\cdot$           & 点乘 \\
+    \verb|\times|          & $\times$          & 叉乘 \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{多行公式对齐}
+
+使用 \texttt{align} 环境（来自 \texttt{amsmath}），用 \texttt{\&} 指定对齐点，
+用 \texttt{\\} 换行：
+
+\begin{lstlisting}
+\begin{align}
+    (a+b)^2 &= a^2 + 2ab + b^2 \\
+    (a-b)^2 &= a^2 - 2ab + b^2 \\
+    (a+b)(a-b) &= a^2 - b^2
+    \label{eq:diff_sq}
+\end{align}
+\end{lstlisting}
+
+\begin{align}
+    (a+b)^2 &= a^2 + 2ab + b^2 \\
+    (a-b)^2 &= a^2 - 2ab + b^2 \\
+    (a+b)(a-b) &= a^2 - b^2
+    \label{eq:diff_sq}
+\end{align}
+
+如果不需要编号，使用 \texttt{align*}：
+
+\begin{lstlisting}
+\begin{align*}
+    f(x) &= \sin^2 x + \cos^2 x \\
+         &= 1
+\end{align*}
+\end{lstlisting}
+
+\begin{align*}
+    f(x) &= \sin^2 x + \cos^2 x \\
+         &= 1
+\end{align*}
+
+\subsubsection{分段函数}
+
+使用 \texttt{cases} 环境：
+
+\begin{lstlisting}
+\[
+f(x) = \begin{cases}
+    x^2,  & x \geq 0 \\
+    -x^2, & x < 0
+\end{cases}
+\]
+\end{lstlisting}
+
+\[
+f(x) = \begin{cases}
+    x^2,  & x \geq 0 \\
+    -x^2, & x < 0
+\end{cases}
+\]
+
+\subsubsection{矩阵}
+
+\begin{lstlisting}
+% 无括号矩阵
+\begin{matrix} a & b \\ c & d \end{matrix}
+
+% 小括号矩阵
+\begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}
+
+% 方括号矩阵
+\begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}
+
+% 行列式
+\begin{vmatrix} a & b \\ c & d \end{vmatrix}
+
+% 范数
+\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}
+\end{lstlisting}
+
+效果：
+\[
+    A = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}, \quad
+    B = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}, \quad
+    \det(A) = \begin{vmatrix} a & b \\ c & d \end{vmatrix} = ad - bc
+\]
+
+\subsubsection{定理与证明环境}
+
+在导言区定义定理环境后，正文中可以直接使用：
+
+\begin{lstlisting}
+\begin{theorem}[勾股定理]
+    设直角三角形两直角边长为 $a, b$，斜边长为 $c$，则
+    \[ a^2 + b^2 = c^2. \]
+\end{theorem}
+
+\begin{proof}
+    （证明内容……）
+\end{proof}
+\end{lstlisting}
+
+\begin{theorem}[勾股定理]
+    设直角三角形两直角边长为 $a, b$，斜边长为 $c$，则
+    \[ a^2 + b^2 = c^2. \]
+\end{theorem}
+
+\begin{proof}
+    此处略去证明过程。\qed
+\end{proof}
+
+\begin{definition}
+    设 $f: \mathbb{R} \to \mathbb{R}$，若对任意 $\varepsilon > 0$，
+    存在 $\delta > 0$，使得当 $|x - x_0| < \delta$ 时有 $|f(x) - L| < \varepsilon$，
+    则称 $\lim_{x \to x_0} f(x) = L$。
+\end{definition}
+
+% ----------------------------------------------------------
+\subsection{列表}
+% ----------------------------------------------------------
+
+\begin{lstlisting}
+% 无序列表
+\begin{itemize}
+    \item 第一项
+    \item 第二项
+\end{itemize}
+
+% 有序列表
+\begin{enumerate}
+    \item 步骤一
+    \item 步骤二
+\end{enumerate}
+
+% 描述列表
+\begin{description}
+    \item[术语一] 解释……
+    \item[术语二] 解释……
+\end{description}
+\end{lstlisting}
+
+% ----------------------------------------------------------
+\subsection{表格}
+% ----------------------------------------------------------
+
+推荐使用 \texttt{booktabs} 宏包制作三线表（期刊标准格式）：
+
+\begin{lstlisting}
+\usepackage{booktabs}  % 导言区加载
+
+\begin{table}[h]
+    \centering
+    \caption{示例三线表}
+    \begin{tabular}{lcc}
+        \toprule
+        姓名 & 成绩 & 等级 \\
+        \midrule
+        张三 & 95 & 优秀 \\
+        李四 & 82 & 良好 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:example}
+\end{table}
+\end{lstlisting}
+
+效果：
+
+\begin{table}[h]
+    \centering
+    \caption{示例三线表}
+    \begin{tabular}{lcc}
+        \toprule
+        姓名 & 成绩 & 等级 \\
+        \midrule
+        张三 & 95 & 优秀 \\
+        李四 & 82 & 良好 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:example}
+\end{table}
+
+% ----------------------------------------------------------
+\subsection{插图}
+% ----------------------------------------------------------
+
+\begin{lstlisting}
+\usepackage{graphicx}  % 导言区加载
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figure.png}
+    \caption{图的标题}
+    \label{fig:example}
+\end{figure}
+
+引用图：见图 \ref{fig:example}。
+\end{lstlisting}
+
+\begin{tipbox}[图片格式建议]
+    优先使用矢量图（\texttt{.pdf}、\texttt{.eps}），其次使用高分辨率位图
+    （\texttt{.png}，300 dpi 以上）。
+\end{tipbox}
+
+% ----------------------------------------------------------
+\subsection{交叉引用与标签}
+% ----------------------------------------------------------
+
+\LaTeX{} 的交叉引用系统是其最强大的功能之一：
+
+\begin{lstlisting}
+% 给任何元素打标签
+\section{引言}  \label{sec:intro}
+\begin{equation} E = mc^2 \label{eq:einstein} \end{equation}
+\begin{figure}  \label{fig:plot}  ...  \end{figure}
+\begin{table}   \label{tab:data}  ...  \end{table}
+
+% 引用
+见第 \ref{sec:intro} 节。
+由式 \eqref{eq:einstein} 可知……
+如图 \ref{fig:plot} 所示。
+\end{lstlisting}
+
+\begin{warnbox}[两次编译]
+    使用交叉引用时，需要编译两次才能正确显示编号。
+    Overleaf 会自动处理这一步骤。
+\end{warnbox}
+
+% ----------------------------------------------------------
+\subsection{参考文献}
+% ----------------------------------------------------------
+
+推荐使用 \texttt{BibTeX} 管理参考文献：
+
+\begin{enumerate}
+    \item 创建 \texttt{references.bib} 文件，格式如下：
+\begin{lstlisting}
+@book{rudin1976,
+    author    = {Walter Rudin},
+    title     = {Principles of Mathematical Analysis},
+    publisher = {McGraw-Hill},
+    year      = {1976},
+    edition   = {3}
+}
+
+@article{euler1748,
+    author  = {Leonhard Euler},
+    title   = {Introductio in analysin infinitorum},
+    journal = {Opera Omnia},
+    year    = {1748}
+}
+\end{lstlisting}
+
+    \item 在正文中引用并添加参考文献列表：
+\begin{lstlisting}
+根据 \cite{rudin1976}，实分析的核心概念是……
+
+\bibliographystyle{plain}   % 参考文献样式
+\bibliography{references}   % 对应 references.bib 文件
+\end{lstlisting}
+\end{enumerate}
+
+\begin{tipbox}[获取 BibTeX 条目]
+    在 Google Scholar 搜索文献 $\to$ 点击引号图标 $\to$ 选择 BibTeX，
+    即可复制现成的条目，无需手动输入。
+\end{tipbox}
+
+% ----------------------------------------------------------
+\subsection{常用宏包推荐}
+% ----------------------------------------------------------
+
+\begin{center}
+\begin{tabular}{lp{8cm}}
+    \toprule
+    宏包 & 功能 \\
+    \midrule
+    \texttt{amsmath}   & AMS 数学宏包（公式、align 等），\textbf{必装} \\
+    \texttt{amssymb}   & AMS 数学符号（$\mathbb{R}$、$\hbar$ 等），\textbf{必装} \\
+    \texttt{amsthm}    & 定理证明环境，\textbf{必装} \\
+    \texttt{ctex}      & 中文支持（中文文档\textbf{必装}） \\
+    \texttt{geometry}  & 自定义页面大小和页边距 \\
+    \texttt{hyperref}  & 生成可点击的超链接和书签 \\
+    \texttt{graphicx}  & 插入图片 \\
+    \texttt{booktabs}  & 三线表 \\
+    \texttt{listings}  & 代码高亮显示 \\
+    \texttt{xcolor}    & 彩色文字和背景 \\
+    \texttt{tikz}      & 绘制矢量图、函数图像、示意图 \\
+    \texttt{pgfplots}  & 绘制数据图表（基于 tikz） \\
+    \texttt{siunitx}   & 物理/数学单位排版 \\
+    \texttt{cleveref}  & 智能交叉引用（自动识别图/表/式） \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+% ----------------------------------------------------------
+\subsection{实用技巧汇总}
+% ----------------------------------------------------------
+
+\subsubsection{间距控制}
+
+\begin{lstlisting}
+\,      % 小间距（常用于积分号后：\int f(x) \, dx）
+\quad   % 中等间距（约一个字符宽）
+\qquad  % 大间距（约两个字符宽）
+\!      % 负间距（缩短间距）
+\hspace{1cm}  % 自定义横向间距
+\vspace{1cm}  % 自定义纵向间距
+\end{lstlisting}
+
+\subsubsection{括号自适应大小}
+
+\begin{lstlisting}
+% 不使用 \left \right（括号不随内容变大）
+(\frac{a}{b})
+
+% 使用 \left \right（括号自动适应大小）
+\left(\frac{a}{b}\right)
+\left[\frac{a}{b}\right]
+\left\{\frac{a}{b}\right\}
+\left|\frac{a}{b}\right|
+\left\|\frac{a}{b}\right\|
+\end{lstlisting}
+
+对比效果：$(\frac{a}{b})$ vs $\left(\frac{a}{b}\right)$。
+\textbf{始终使用} \verb|\left| 和 \verb|\right|！
+
+\subsubsection{常见错误与解决}
+
+\begin{center}
+\begin{tabular}{lp{7cm}}
+    \toprule
+    问题 & 解决方法 \\
+    \midrule
+    公式编号显示为 \textbf{??} & 编译两次（Overleaf 自动处理）\\
+    中文显示为乱码 & 确认编译器为 XeLaTeX，加载 \texttt{ctex} \\
+    图片找不到 & 图片文件需上传到 Overleaf 项目，路径区分大小写 \\
+    \verb|\|（反斜杠）显示 & 使用 \verb|\textbackslash| \\
+    \texttt{\%} 显示 & 使用 \verb|\%|（否则被视为注释）\\
+    \texttt{\&} 显示 & 使用 \verb|\&| \\
+    大括号 \texttt{\{\}} 显示 & 使用 \verb|\{| 和 \verb|\}| \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{注释}
+
+\begin{lstlisting}
+% 这是单行注释，编译时不显示
+这里是正文。 % 行尾注释
+
+% 可以用注释临时隐藏内容，方便调试
+% \section{暂时隐藏的章节}
+\end{lstlisting}
+
+\subsubsection{Overleaf 快捷键}
+
+\begin{center}
+\begin{tabular}{ll}
+    \toprule
+    快捷键 & 功能 \\
+    \midrule
+    \texttt{Ctrl + Enter} & 编译文档 \\
+    \texttt{Ctrl + /}     & 注释/取消注释选中行 \\
+    \texttt{Ctrl + B}     & 加粗（\verb|\textbf{}|） \\
+    \texttt{Ctrl + I}     & 斜体（\verb|\textit{}|） \\
+    \texttt{Ctrl + Z}     & 撤销 \\
+    \texttt{Ctrl + F}     & 查找 \\
+    \texttt{Ctrl + H}     & 查找并替换 \\
+    点击 PDF & 跳转到对应源代码 \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================================
+\section{AI 时代，如何使用 \LaTeX{}}
+% ============================================================
+
+随着大语言模型（LLM）的普及，AI 工具已经深刻改变了 \LaTeX{} 的使用方式。
+善用 AI，可以将 \LaTeX{} 的学习曲线大幅压缩，让你把精力集中在数学本身。
+
+\subsection{AI 工具在 \LaTeX{} 中的典型应用}
+
+\subsubsection{代码补全与错误修复}
+
+将报错信息直接粘贴给 ChatGPT、Claude、Kimi、文心一言等 AI：
+
+\begin{tipbox}[示例 Prompt]
+    我的 \LaTeX{} 代码报错如下，请帮我找出问题并修正：\\
+    \texttt{! Missing \$ inserted.}\\
+    \texttt{l.42  \textbackslash frac\{a\}\{b\}}\\
+    代码片段：（粘贴你的代码）
+\end{tipbox}
+
+AI 通常能快速定位并修复常见语法错误，省去查文档的时间。
+
+\subsubsection{将文字描述转换为 \LaTeX{} 代码}
+
+\begin{tipbox}[示例 Prompt]
+    请用 \LaTeX{} 写出下面这个公式：\\
+    "黎曼 zeta 函数定义为，对实部大于1的复数 s，
+    zeta(s) 等于从 n=1 到无穷的 1/n 的 s 次方的求和"
+\end{tipbox}
+
+AI 输出：
+
+\begin{lstlisting}
+\[
+\zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^s}, \quad \operatorname{Re}(s) > 1
+\]
+\end{lstlisting}
+
+渲染结果：
+\[
+\zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^s}, \quad \operatorname{Re}(s) > 1
+\]
+
+\subsubsection{截图/拍照转 \LaTeX{}}
+
+\begin{itemize}
+    \item \textbf{Mathpix Snip}（\href{https://mathpix.com}{mathpix.com}）：
+          截图或拍照任意数学公式，自动转换为 \LaTeX{} 代码，
+          准确率极高，是目前最推荐的工具之一。
+    \item \textbf{ChatGPT（GPT-4o）/ Claude}：
+          直接上传公式图片，要求返回 \LaTeX{} 代码。
+    \item \textbf{简单公式}：手机拍照后发给 AI，请求识别并转写。
+\end{itemize}
+
+\subsubsection{自动生成文档框架}
+
+\begin{tipbox}[示例 Prompt]
+    请帮我生成一份 \LaTeX{} 论文模板，包含：标题、摘要、引言、方法、
+    结论和参考文献各节，使用 article 文档类，需要支持中文，
+    导言区加载常用数学宏包。
+\end{tipbox}
+
+AI 会生成完整可编译的框架，你只需填入自己的内容。
+
+\subsubsection{TikZ 绘图辅助}
+
+TikZ 是 \LaTeX{} 中最强大的绘图宏包，但语法较复杂。AI 可以大幅降低学习门槛：
+
+\begin{tipbox}[示例 Prompt]
+    请用 TikZ 画一个单位圆，在第一象限标注角度 $\theta$，
+    画出对应的正弦值和余弦值，并标上坐标轴。
+\end{tipbox}
+
+\subsection{高效使用 AI 的原则}
+
+\begin{enumerate}
+    \item \textbf{先自己尝试，再请教 AI}\\
+          只有理解了基础命令，你才能看懂并修改 AI 生成的代码，
+          否则 AI 犯错时你也无从发现。
+    \item \textbf{给出足够上下文}\\
+          告诉 AI 你的编译器（XeLaTeX / pdflatex）、已加载的宏包，
+          以及完整的错误信息，而不是只粘贴一行代码。
+    \item \textbf{验证 AI 的输出}\\
+          AI 有时会给出在语法上错误、或渲染结果不符合预期的代码，
+          一定要在 Overleaf 中实际编译验证。
+    \item \textbf{用 AI 学习，不是替代学习}\\
+          请求 AI 解释生成代码的含义（"请逐行解释这段 \LaTeX{} 代码"），
+          这是最高效的学习路径之一。
+    \item \textbf{版权与学术诚信}\\
+          用 AI 辅助排版和格式化是合理的，但文字内容和数学推导
+          \textbf{必须}是你自己的成果。遵守学校的学术诚信规定。
+\end{enumerate}
+
+\subsection{推荐工具清单}
+
+\begin{center}
+\begin{tabular}{lll}
+    \toprule
+    工具 & 类型 & 用途 \\
+    \midrule
+    \href{https://www.overleaf.com}{Overleaf}
+        & 在线编辑器 & \LaTeX{} 主力编写平台 \\
+    \href{https://mathpix.com}{Mathpix Snip}
+        & 截图识别 & 公式图片转 \LaTeX{} 代码 \\
+    \href{https://chatgpt.com}{ChatGPT}
+        & 大语言模型 & 代码生成、错误修复、解释 \\
+    \href{https://claude.ai}{Claude}
+        & 大语言模型 & 代码生成、长文档处理 \\
+    \href{https://kimi.moonshot.cn}{Kimi}
+        & 大语言模型（中文） & 中文 \LaTeX{} 辅助 \\
+    \href{https://detexify.kirelabs.org}{Detexify}
+        & 手写识别 & 手画符号查找对应 \LaTeX{} 命令 \\
+    \href{https://www.tablesgenerator.com}{Tables Generator}
+        & 在线工具 & 可视化生成 \LaTeX{} 表格代码 \\
+    \href{https://tikzcd.yichuanshen.de}{TikZCD Editor}
+        & 在线工具 & 可视化绘制交换图 \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================================
+\section*{附录：最简可运行模板}
+% ============================================================
+\addcontentsline{toc}{section}{附录：最简可运行模板}
+
+将以下代码复制到 Overleaf 新项目中，选择 XeLaTeX 编译，即可得到一份
+包含中文、数学公式、定理环境的最小模板：
+
+\begin{lstlisting}
+\documentclass[12pt, a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{definition}[theorem]{定义}
+
+\title{我的第一篇 \LaTeX{} 文档}
+\author{你的姓名}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+欢迎来到 \LaTeX{} 的世界！下面是一个数学公式示例：
+\[
+    \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}.
+\]
+
+\begin{definition}
+    实数 $e$ 定义为 $e = \lim_{n\to\infty}\left(1+\frac{1}{n}\right)^n$。
+\end{definition}
+
+\begin{theorem}[欧拉公式]
+    $e^{i\pi} + 1 = 0$.
+\end{theorem}
+
+\end{document}
+\end{lstlisting}
+
+\bigskip
+
+\begin{tipbox}[学习建议]
+    \begin{enumerate}
+        \item \textbf{第一周}：掌握文档结构、章节命令、文本格式，
+              完成第一份完整文档。
+        \item \textbf{第二周}：专注数学公式，从行内公式到 align 环境，
+              熟记常用符号命令。
+        \item \textbf{第三周}：学习表格、插图、交叉引用，尝试用
+              \LaTeX{} 完成一次课程作业。
+        \item \textbf{第四周及以后}：按需学习 BibTeX、TikZ 绘图、Beamer
+              幻灯片等进阶内容。
+    \end{enumerate}
+    \textbf{最重要的一点：动手实践！}每次上课后，用 \LaTeX{} 重新整理当天
+    的笔记和公式，是最有效的练习方式。
+\end{tipbox}
+
+\end{document}
